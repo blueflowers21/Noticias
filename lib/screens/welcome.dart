@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:univalle_news/screens/bottom.dart';
 import 'package:univalle_news/screens/log_in.dart';
 import 'package:univalle_news/screens/news.dart';
 import 'package:univalle_news/screens/register.dart';
