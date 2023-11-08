@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "524995893021",
+    "project_id": "movilfirebasewe",
+    "storage_bucket": "movilfirebasewe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524995893021:android:c7b72e25bd45873ede33f4",
+        "android_client_info": {
+          "package_name": "com.dario.firebase.firebase_crud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv7VkQEC6dPZSgYEecceqYYvWgPMFz97E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524995893021:android:546ea457fb09f4fbde33f4",
+        "android_client_info": {
+          "package_name": "com.example.sprint1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv7VkQEC6dPZSgYEecceqYYvWgPMFz97E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
