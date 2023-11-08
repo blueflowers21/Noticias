@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1011203086538",
+    "project_id": "bruna-94cd1",
+    "storage_bucket": "bruna-94cd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011203086538:android:dc062d3665f28497b93c33",
+        "android_client_info": {
+          "package_name": "com.example.univalle_news"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-7ImtLhjKe2qvz3u2bzKtyck2krY0NlI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

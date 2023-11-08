@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCIdOK6vrQBAXO0Hm3y6UcSYVLRwMLQpzI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>19763097480</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.univalleNews</string>
+	<key>PROJECT_ID</key>
+	<string>univalle-news-11560</string>
+	<key>STORAGE_BUCKET</key>
+	<string>univalle-news-11560.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:19763097480:ios:f6d0e79e2385c78f86543d</string>
+</dict>
+</plist>
