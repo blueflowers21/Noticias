@@ -1,7 +1,11 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_print
 
+import 'dart:core';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:univalle_news/controller/image_picker_controller.dart';
 
 class NewsManagement extends StatefulWidget {
   const NewsManagement({Key? key}) : super(key: key);
@@ -18,6 +22,7 @@ class _NewsManagementState extends State<NewsManagement> {
   final TextEditingController _authorController = TextEditingController();
   List<DocumentSnapshot> newsList = [];
   int selectedNewsIndex = -1;
+   String imageUrl = '';
 
   @override
   void initState() {
@@ -35,7 +40,13 @@ class _NewsManagementState extends State<NewsManagement> {
 
   @override
   Widget build(BuildContext context) {
+
+    final controller = Get.put(ImagePickerController());
     return Scaffold(
+       appBar: AppBar(
+          title: const Text('News Management'),
+          backgroundColor: const Color.fromARGB(255, 0, 26, 158),
+        ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -72,8 +83,30 @@ class _NewsManagementState extends State<NewsManagement> {
               child: TextField(
                 controller: _authorController,
                 decoration: const InputDecoration(labelText: 'Author'),
-              ),
+              ),             
             ),
+            ElevatedButton(
+                onPressed: () {
+                  controller.pickImage();
+                },
+                child: const Text('Pick your Image'),
+              ),
+              Obx(() {
+                return Container(
+                  child: controller.image.value == null
+                      ? const Icon(Icons.camera, size: 50,)
+                      : Image.file(                       
+                          File(controller.image.value!.path),
+                        ),
+                );
+              }),
+                ElevatedButton(
+                onPressed: () async {
+                  await controller.uploadImageToFirebase();
+                },
+                child: const Text('Upload to Firebase Storage'),
+              ),
+                      
             ElevatedButton(
                style: ElevatedButton.styleFrom(
                     foregroundColor: const Color.fromARGB(255, 254, 254, 255), backgroundColor: const Color.fromARGB(255, 0, 26, 158),
@@ -82,8 +115,8 @@ class _NewsManagementState extends State<NewsManagement> {
                     ),
                   ),
               onPressed: () {
-                if (selectedNewsIndex == -1) {
-                  _addNews();
+                if (selectedNewsIndex == -1) {                
+                  _addNews();                 
                 } else {
                   _updateNews(selectedNewsIndex);
                 }
@@ -153,21 +186,33 @@ class _NewsManagementState extends State<NewsManagement> {
     final description = _descriptionController.text;
     final category = _categoryController.text;
     final author = _authorController.text;
+    final controller = Get.put(ImagePickerController());
+    
 
     if (title.isEmpty || description.isEmpty || category.isEmpty || author.isEmpty) {
       return;
     }
+
+     
 
     _firestore.collection('news').add({
       'titulo': title,
       'descripcion': description,
       'categoria': category,
       'autor': author,
+      'imageURL': controller.networkImage.value.toString(),
+      
     }).then((value) {
       _titleController.clear();
       _descriptionController.clear();
       _categoryController.clear();
       _authorController.clear();
+
+      controller.image.value = null;
+
+    controller.networkImage.value = '';
+      
+      
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Success!'),
       ));
@@ -185,6 +230,7 @@ class _NewsManagementState extends State<NewsManagement> {
     final description = _descriptionController.text;
     final category = _categoryController.text;
     final author = _authorController.text;
+    final controller = Get.put(ImagePickerController());
 
     if (title.isEmpty || description.isEmpty || category.isEmpty || author.isEmpty) {
       return;
@@ -195,11 +241,14 @@ class _NewsManagementState extends State<NewsManagement> {
       'descripcion': description,
       'categoria': category,
       'autor': author,
+      'imageURL': controller.networkImage.value.toString(),
     }).then((_) {
       _titleController.clear();
       _descriptionController.clear();
       _categoryController.clear();
       _authorController.clear();
+      controller.image.value = null;
+    controller.networkImage.value = '';
       selectedNewsIndex = -1;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Updated New Succesfully'),
@@ -213,15 +262,26 @@ class _NewsManagementState extends State<NewsManagement> {
   }
 
   void _editNews(int index) {
-    final news = newsList[index].data() as Map<String, dynamic>;
-    _titleController.text = news['titulo'];
-    _descriptionController.text = news['descripcion'];
-    _categoryController.text = news['categoria'];
-    _authorController.text = news['autor'];
-    setState(() {
-      selectedNewsIndex = index;
-    });
+  final news = newsList[index].data() as Map<String, dynamic>;
+  _titleController.text = news['titulo'];
+  _descriptionController.text = news['descripcion'];
+  _categoryController.text = news['categoria'];
+  _authorController.text = news['autor'];
+
+  final controller = Get.find<ImagePickerController>();
+
+  // Para que el URL se mantenga igual si no se ha cambiado
+  if (news['imageURL'] != null && news['imageURL'].isNotEmpty) {
+    controller.networkImage.value = news['imageURL'];
+  } else {
+    controller.image.value = null;
   }
+
+  setState(() {
+    selectedNewsIndex = index;
+  });
+}
+
 
   void _deleteNews(int index) {
     final newsId = newsList[index].id;

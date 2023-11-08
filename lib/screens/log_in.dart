@@ -1,8 +1,11 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:univalle_news/screens/bottom.dart';
+import 'package:univalle_news/screens/news.dart'; // Importa Firestore para acceder a la base de datos de Firebase
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -14,28 +17,50 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+Future<bool> checkIfUserIsAdmin(User user) async {
+  try {
+    final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+
+    if (userDoc.exists && userDoc.data() != null) {
+      final userData = userDoc.data();
+      final userEmail = userData?['email'];
+      final userPassword = userData?['password'];
+
+      // Comprueba si el usuario tiene las credenciales de administrador
+      if (userEmail == 'admin@gmail.com' && userPassword == 'admin123456') {
+        return true;
+      }
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print('Error al verificar si el usuario es administrador: $e');
+    }
+  }
+  return false;
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
-        backgroundColor: const Color.fromARGB(255, 0, 26, 158), 
+        backgroundColor: const Color.fromARGB(255, 0, 26, 158),
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
-            elevation: 4, // Elevación del Card
+            elevation: 4,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0), 
+              borderRadius: BorderRadius.circular(16.0),
             ),
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color.fromARGB(255, 0, 26, 158), Colors.blue], 
+                  colors: [Color.fromARGB(255, 0, 26, 158), Colors.blue],
                 ),
               ),
               child: Padding(
@@ -47,7 +72,7 @@ class _LogInState extends State<LogIn> {
                     const Text(
                       'Login',
                       style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255), 
+                        color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
@@ -55,21 +80,21 @@ class _LogInState extends State<LogIn> {
                     const SizedBox(height: 20),
                     Card(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0), 
+                        borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: TextField(
                         controller: emailController,
                         decoration: const InputDecoration(
                           labelText: 'Email',
                           contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                          border: InputBorder.none, 
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
                     const SizedBox(height: 16.0),
                     Card(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0), 
+                        borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: TextField(
                         controller: passwordController,
@@ -77,7 +102,7 @@ class _LogInState extends State<LogIn> {
                         decoration: const InputDecoration(
                           labelText: 'Password',
                           contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                          border: InputBorder.none, // Sin bordes
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
@@ -96,18 +121,25 @@ class _LogInState extends State<LogIn> {
                           final user = userCredential.user;
 
                           if (user != null) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) => const BottomNavigationBarExampleApp()),
-                            );
+                            bool isAdmin = await checkIfUserIsAdmin(user);
+
+                            if (isAdmin) {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) => const BottomNavigationBarExampleApp()),
+                              );
+                            } else {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) => const  News()),
+                              );
+                            }
                           }
                         } catch (e) {
-                          // errores
-                          String errorMessage = 'Error durante el inicio de sesión.';
+                          String errorMessage = 'Error during login.';
                           if (e is FirebaseAuthException) {
                             if (e.code == 'user-not-found') {
-                              errorMessage = 'Usuario no encontrado. Por favor, regístrate primero.';
+                              errorMessage = 'User not found. Please register first.';
                             } else if (e.code == 'wrong-password') {
-                              errorMessage = 'Contraseña incorrecta. Por favor, inténtalo de nuevo.';
+                              errorMessage = 'Incorrect password. Please try again.';
                             }
                           }
 
@@ -116,7 +148,9 @@ class _LogInState extends State<LogIn> {
                               content: Text(errorMessage),
                             ),
                           );
-                          print('Error durante el inicio de sesión: $e');
+                          if (kDebugMode) {
+                            print('Error during login: $e');
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

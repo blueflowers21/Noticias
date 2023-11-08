@@ -14,6 +14,10 @@ class _NewsState extends State<News> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: const Text('News'),
+          backgroundColor: const Color.fromARGB(255, 0, 26, 158),
+        ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('news').snapshots(),
         builder: (context, snapshot) {
@@ -66,33 +70,41 @@ class _NewsState extends State<News> {
                     itemBuilder: (context, index) {
                       final newsData = newsList[index].data() as Map<String, dynamic>;
                       return Card(
-                        margin: const EdgeInsets.all(10),
-                        elevation: 4,
-                        child: ListTile(
-                          leading: const Icon(Icons.article, size: 48, color: Color.fromARGB(255, 0, 26, 158)), 
-                          title: Text(
-                            newsData['titulo'],
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Description: ${newsData['descripcion']}',
-                                style: const TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                              Text(
-                                'Author: ${newsData['autor']}',
-                                style: const TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                        
+                        
+  margin: const EdgeInsets.all(10),
+  elevation: 4,
+  child: ListTile(
+    
+    leading: Image.network(
+      newsData['imageURL'], 
+      width: 48,
+      height: 48,
+    ),
+    title: Text(
+      newsData['titulo'],
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    ),
+    subtitle: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Description: ${newsData['descripcion']}',
+          style: const TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+        Text(
+          'Author: ${newsData['autor']}',
+          style: const TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+      ],
+    ),
+  ),
+);
+
                     },
                   ),
                 ],

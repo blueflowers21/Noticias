@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:univalle_news/screens/bottom.dart';
+import 'package:univalle_news/screens/news.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -165,7 +165,7 @@ class _SignUpState extends State<SignUp> {
                     await firestore.collection('users').doc(uid).set(userData);
 
                     Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => const BottomNavigationBarExampleApp()),
+                      MaterialPageRoute(builder: (context) => const News()),
                     );
                   } catch (e) {
                     // Errores

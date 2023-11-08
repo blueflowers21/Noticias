@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:univalle_news/screens/commentsManagement%20.dart';
+import 'package:univalle_news/screens/image.dart';
 import 'package:univalle_news/screens/news.dart';
 import 'package:univalle_news/screens/newsManagement.dart';
+ // Import the ImageUpload screen
 
 void main() => runApp(const BottomNavigationBarExampleApp());
 
@@ -33,52 +36,43 @@ class _BottomNavigationBarExampleState
     });
   }
 
-  AppBar _buildAppBar(int index) {
-    switch (index) {
-      case 0:
-        return AppBar(
-          title: const Text('News'),
-          backgroundColor: const Color.fromARGB(255, 0, 26, 158),
-        );
-      case 1:
-        return AppBar(
-          title: const Text('News Management'),
-          backgroundColor: const Color.fromARGB(255, 0, 26, 158),
-        );
-      default:
-        return AppBar(
-          title: const Text('Default Title'),
-          backgroundColor: const Color.fromARGB(255, 0, 26, 158),
-        );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(_selectedIndex), 
       body: IndexedStack(
         index: _selectedIndex,
         children: const [    
           News(),
-          NewsManagement(),
+          NewsManagement(),        
+          UploadImage(), 
+          Comments(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.newspaper_sharp),
             label: 'News',
             backgroundColor: Color.fromARGB(255, 0, 26, 158),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.manage_search),
             label: 'Management',
+            backgroundColor: Color.fromARGB(255, 0, 26, 158),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.comment),
+            label: 'Imagen',
+            backgroundColor: Color.fromARGB(255, 0, 26, 158),
+          ),
+          BottomNavigationBarItem( 
+            icon: Icon(Icons.image),
+            label: 'Comments',
             backgroundColor: Color.fromARGB(255, 0, 26, 158),
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color.fromARGB(255, 0, 26, 158),
+        selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
         onTap: _onItemTapped,
       ),
     );
