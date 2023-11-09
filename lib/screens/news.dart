@@ -63,48 +63,48 @@ class _NewsState extends State<News> {
                       ),
                     ),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: newsList.length,
-                    itemBuilder: (context, index) {
-                      final newsData = newsList[index].data() as Map<String, dynamic>;
-                      return Card(
-                        
-                        
-  margin: const EdgeInsets.all(10),
-  elevation: 4,
-  child: ListTile(
+                 ListView.builder(
+  shrinkWrap: true,
+  physics: const NeverScrollableScrollPhysics(),
+  itemCount: newsList.length,
+  itemBuilder: (context, index) {
+    final newsData = newsList[index].data() as Map<String, dynamic>;
     
-    leading: Image.network(
-      newsData['imageURL'], 
-      width: 48,
-      height: 48,
-    ),
-    title: Text(
-      newsData['titulo'],
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
+    return Card(
+      margin: const EdgeInsets.all(10),
+      elevation: 4,
+      child: ListTile(
+        leading: newsData['imageURL'] != null && newsData['imageURL'].isNotEmpty
+            ? Image.network(
+                newsData['imageURL'],
+                width: 48,
+                height: 48,
+              )
+            : const Icon(Icons.image, size: 48),
+        title: Text(
+          newsData['titulo'],
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Description: ${newsData['descripcion']}',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            Text(
+              'Author: ${newsData['autor']}',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
-    ),
-    subtitle: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Description: ${newsData['descripcion']}',
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
-        ),
-        Text(
-          'Author: ${newsData['autor']}',
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
-        ),
-      ],
-    ),
-  ),
-);
-
+    );
+  
                     },
                   ),
                 ],

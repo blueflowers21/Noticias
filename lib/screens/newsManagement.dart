@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:univalle_news/controller/image_picker_controller.dart';
+import 'package:univalle_news/services/notifications.dart';
+
 
 class NewsManagement extends StatefulWidget {
   const NewsManagement({Key? key}) : super(key: key);
@@ -116,7 +118,8 @@ class _NewsManagementState extends State<NewsManagement> {
                   ),
               onPressed: () {
                 if (selectedNewsIndex == -1) {                
-                  _addNews();                 
+                  _addNews(); 
+                  NotificationServices().showNotification(title: 'Nueva Noticia!', body: _titleController.text);                
                 } else {
                   _updateNews(selectedNewsIndex);
                 }
